@@ -67,3 +67,47 @@ module.exports.deleteBooking = async (bookingId) => {
     throw new Error("Error deleting booking: " + error.message);
   }
 };
+
+module.exports.getAllVenues = async () => {
+  try {
+    const venues = await Booking.find();
+    return venues;
+  } catch (error) {
+    throw new Error("Error retrieving venues: " + error.message);
+  }
+};
+
+module.exports.getPendingRequests = async () => {
+  try {
+    const pendingRequests = await Booking.find({ status: "pending" });
+    return pendingRequests;
+  } catch (error) {
+    throw new Error("Error retrieving pending requests: " + error.message);
+  }
+};
+
+module.exports.acceptBooking = async (bookingId) => {
+  try {
+    const updatedBooking = await Booking.findByIdAndUpdate(
+      bookingId,
+      { status: "accepted" },
+      { new: true }
+    );
+    return updatedBooking;
+  } catch (error) {
+    throw new Error("Error accepting booking: " + error.message);
+  }
+};
+
+module.exports.rejectBooking = async (bookingId) => {
+  try {
+    const rejectedBooking = await Booking.findByIdAndUpdate(
+      bookingId,
+      { status: "rejected" },
+      { new: true }
+    );
+    return rejectedBooking;
+  } catch (error) {
+    throw new Error("Error rejecting booking: " + error.message);
+  }
+};

@@ -4,6 +4,10 @@ const {
   getAllBookings,
   updateBooking,
   deleteBooking,
+  getAllVenues,
+  getPendingRequests,
+  acceptBooking,
+  rejectBooking,
 } = require("../services/booking.service");
 
 // Create Booking
@@ -139,6 +143,50 @@ module.exports.deleteBooking = async (req, res, next) => {
 
     const deletedBooking = await deleteBooking(bookingId);
     return res.status(200).json(deletedBooking);
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports.getAllVenues = async (req, res, next) => {
+  try {
+    const venues = await getAllVenues();
+    return res.status(200).json(venues);
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports.getPendingRequests = async (req, res, next) => {
+  try {
+    const pendingRequests = await getPendingRequests(); 
+    return res.status(200).json(pendingRequests);
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports.acceptBooking = async (req, res, next) => {
+  try {
+    const { bookingId } = req.params;
+    if (!bookingId) {
+      return res.status(400).send("Booking ID is required");
+    }
+    const updatedBooking = await acceptBooking(bookingId);
+    return res.status(200).json(updatedBooking);
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports.rejectBooking = async (req, res, next) => {
+  try {
+    const { bookingId } = req.params;
+    if (!bookingId) {
+      return res.status(400).send("Booking ID is required");
+    }
+    const rejectedBooking = await rejectBooking(bookingId);
+    return res.status(200).json(rejectedBooking);
   } catch (error) {
     next(error);
   }
